@@ -1,0 +1,309 @@
+# # Resolve react_native_pods.rb with node to allow for hoisting
+# require Pod::Executable.execute_command('node', ['-p',
+#   'require.resolve(
+#     "react-native/scripts/react_native_pods.rb",
+#     {paths: [process.argv[1]]},
+#   )', __dir__]).strip
+
+# platform :ios, '13.0'  # minimum iOS version supported
+
+# prepare_react_native_project!
+
+# flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
+
+# linkage = ENV['USE_FRAMEWORKS']
+# if linkage != nil
+#   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+#   use_frameworks! :linkage => linkage.to_sym
+# end
+
+# target 'ZBWA' do
+#   config = use_native_modules!
+
+#   # Use static frameworks (needed for Firebase etc.)
+#   use_frameworks! :linkage => :static
+#   $RNFirebaseAsStaticFramework = true
+
+#   flags = get_default_flags()
+
+
+
+
+#   pod 'RNCPushNotificationIOS', :path => '../node_modules/@react-native-community/push-notification-ios'
+#   pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
+#   pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+#   pod 'react-native-compressor', :path => '../node_modules/react-native-compressor'
+
+#   # Disable Hermes and Fabric for now; change if needed
+#   flags = {
+#     :hermes_enabled => false,
+#     :fabric_enabled => false
+#   }
+
+#   use_react_native!(
+#     :path => config[:reactNativePath],
+#     :hermes_enabled => flags[:hermes_enabled],
+#     :fabric_enabled => flags[:fabric_enabled],
+#     # Flipper can cause issues with use_frameworks!, so comment if problems occur
+#     # :flipper_configuration => flipper_config,
+#     :app_path => "#{Pod::Config.instance.installation_root}/.."
+#   )
+
+#   # Helper method to require scripts via node
+#   def node_require(script)
+#     require Pod::Executable.execute_command('node', ['-p',
+#       "require.resolve('#{script}', {paths: [process.argv[1]]})", __dir__]).strip
+#   end
+
+#   node_require('react-native/scripts/react_native_pods.rb')
+#   node_require('react-native-permissions/scripts/setup.rb')
+
+#   # Uncomment permissions you need here
+#   setup_permissions([
+#     'Camera',
+#     'Notifications',
+#     'PhotoLibrary',
+#     'PhotoLibraryAddOnly',
+#   ])
+
+#   target 'ZBWATests' do
+#     inherit! :complete
+#     # Pods for testing
+#   end
+
+#   post_install do |installer|
+#     installer.pods_project.targets.each do |target|
+
+#       # Fix BoringSSL-GRPC compiler flags issue
+#       if target.name == 'BoringSSL-GRPC'
+#         target.source_build_phase.files.each do |file|
+#           if file.settings && file.settings['COMPILER_FLAGS']
+#             flags = file.settings['COMPILER_FLAGS'].split
+#             flags.reject! { |flag| flag.start_with?('-G') }
+#             file.settings['COMPILER_FLAGS'] = flags.join(' ')
+#           end
+#         end
+#       end
+
+#       # Fix gRPC-Core for C++17 and exceptions
+#       if target.name == 'gRPC-Core'
+#         target.build_configurations.each do |config|
+#           config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
+#           config.build_settings['CLANG_CXX_LIBRARY'] = 'libc++'
+#           config.build_settings['GCC_ENABLE_CPP_EXCEPTIONS'] = 'YES'
+#           config.build_settings['OTHER_CPLUSPLUSFLAGS'] = '-std=c++17'
+#           config.build_settings['OTHER_CFLAGS'] = '-std=gnu11'
+#         end
+#       end
+
+#       # Set build settings for all targets
+#       target.build_configurations.each do |config|
+#         config.build_settings["CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES"] = true
+#         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+#         config.build_settings['GCC_OPTIMIZATION_LEVEL'] = '0'
+
+#         # **Do NOT delete GCC_ENABLE_CPP_EXCEPTIONS here**, to keep exceptions enabled for gRPC-Core and others
+#         # config.build_settings.delete('GCC_ENABLE_CPP_EXCEPTIONS')
+
+#         # Set REANIMATED_VERSION_STRING for RNReanimated target
+#         if target.name == 'RNReanimated'
+#           require 'json'
+#           package = JSON.parse(File.read(File.join(__dir__, '..', 'package.json')))
+#           reanimated_version = package['dependencies']['react-native-reanimated'] || package['devDependencies']['react-native-reanimated']
+#           reanimated_version = reanimated_version.gsub(/[^0-9.]/, '')  # Remove non-numeric characters
+
+#           config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)']
+#           config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << "REANIMATED_VERSION_STRING=\\\"#{reanimated_version}\\\""
+#         end
+#       end
+#     end
+
+#     react_native_post_install(
+#       installer,
+#       config[:reactNativePath],
+#       :mac_catalyst_enabled => false
+#     )
+#     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+#   end
+# end
+
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '14.0'
+
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+
+linkage = ENV['USE_FRAMEWORKS']
+if linkage
+  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  use_frameworks! :linkage => linkage.to_sym
+end
+
+target 'ZBWA' do
+  config = use_native_modules!
+
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
+
+  flags = get_default_flags()
+
+  # ✅ Do NOT override gRPC versions manually
+  # Remove these if present:
+  # pod 'gRPC-Core'
+  # pod 'gRPC-C++'
+
+  pod 'RNCPushNotificationIOS', :path => '../node_modules/@react-native-community/push-notification-ios'
+  pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
+  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+  pod 'react-native-compressor', :path => '../node_modules/react-native-compressor'
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    :hermes_enabled => false,
+    :fabric_enabled => false,
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  target 'ZBWATests' do
+    inherit! :complete
+  end
+
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+
+      target.build_configurations.each do |config|
+        config.build_settings["CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES"] = true
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
+        config.build_settings['GCC_OPTIMIZATION_LEVEL'] = '0'
+      end
+    end
+
+    react_native_post_install(
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false
+    )
+  end
+end
+
+
+
+# source 'https://github.com/CocoaPods/Specs.git'
+
+# platform :ios, '14.0'
+
+
+# require_relative '../node_modules/react-native/scripts/react_native_pods'
+
+# linkage = ENV['USE_FRAMEWORKS']
+# if linkage
+#   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+#   use_frameworks! :linkage => linkage.to_sym
+# end
+
+# target 'ZBWA' do
+#   config = use_native_modules!
+
+#   use_frameworks! :linkage => :static
+#   $RNFirebaseAsStaticFramework = true
+
+#   flags = get_default_flags()
+
+#   # gRPC pin stable versions to avoid errors
+# # Podfile me yeh versions use karo:
+# pod 'gRPC-C++', '1.69.0'
+# pod 'gRPC-Core', '1.69.0'
+# pod 'abseil', '~> 1.20240722.0'
+
+
+#   pod 'RNCPushNotificationIOS', :path => '../node_modules/@react-native-community/push-notification-ios'
+#   pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
+#   pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+#   pod 'react-native-compressor', :path => '../node_modules/react-native-compressor'
+
+#   flags = {
+#     :hermes_enabled => false,
+#     :fabric_enabled => false
+#   }
+
+#   use_react_native!(
+#     :path => config[:reactNativePath],
+#     :hermes_enabled => flags[:hermes_enabled],
+#     :fabric_enabled => flags[:fabric_enabled],
+#     # Flipper is disabled here to avoid errors
+#     # :flipper_configuration => flipper_config,
+#     :app_path => "#{Pod::Config.instance.installation_root}/.."
+#   )
+
+#   def node_require(script)
+#     require Pod::Executable.execute_command('node', ['-p',
+#       "require.resolve('#{script}', {paths: [process.argv[1]]})", __dir__]).strip
+#   end
+
+#   node_require('react-native/scripts/react_native_pods.rb')
+#   node_require('react-native-permissions/scripts/setup.rb')
+
+#   setup_permissions([
+#     'Camera',
+#     'Notifications',
+#     'PhotoLibrary',
+#     'PhotoLibraryAddOnly',
+#   ])
+
+#   target 'ZBWATests' do
+#     inherit! :complete
+#   end
+
+# post_install do |installer|
+#   installer.pods_project.targets.each do |target|
+    
+#     # Remove unsupported '-G' flag for BoringSSL-GRPC
+#     if target.name == 'BoringSSL-GRPC'
+#       target.source_build_phase.files.each do |file|
+#         if file.settings && file.settings['COMPILER_FLAGS']
+#           flags = file.settings['COMPILER_FLAGS'].split
+#           flags.reject! { |flag| flag.start_with?('-G') }
+#           file.settings['COMPILER_FLAGS'] = flags.join(' ')
+#         end
+#       end
+#     end
+
+
+
+
+#       if target.name == 'gRPC-Core'
+#         target.build_configurations.each do |config|
+#           config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
+#           config.build_settings['CLANG_CXX_LIBRARY'] = 'libc++'
+#           config.build_settings['GCC_ENABLE_CPP_EXCEPTIONS'] = 'YES'
+#           config.build_settings['OTHER_CPLUSPLUSFLAGS'] = '-std=c++17'
+#           config.build_settings['OTHER_CFLAGS'] = '-std=gnu11'
+#         end
+#       end
+
+#       target.build_configurations.each do |config|
+#         config.build_settings["CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES"] = true
+#         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+#         config.build_settings['GCC_OPTIMIZATION_LEVEL'] = '0'
+
+#         if target.name == 'RNReanimated'
+#           require 'json'
+#           package = JSON.parse(File.read(File.join(__dir__, '..', 'package.json')))
+#           reanimated_version = package['dependencies']['react-native-reanimated'] || package['devDependencies']['react-native-reanimated']
+#           reanimated_version = reanimated_version.gsub(/[^0-9.]/, '')
+#           config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)']
+#           config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << "REANIMATED_VERSION_STRING=\\\"#{reanimated_version}\\\""
+#         end
+#       end
+#     end
+
+#     react_native_post_install(
+#       installer,
+#       config[:reactNativePath],
+#       :mac_catalyst_enabled => false
+#     )
+
+#     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+#   end
+# end
+
