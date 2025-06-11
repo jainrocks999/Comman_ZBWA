@@ -26,7 +26,10 @@ const Splash = () => {
   
 
   useEffect(() => {
+    // requestPermissions();
+     if (Platform.OS === 'android') {
     requestPermissions();
+  }
   }, []);
 
   const appVersion = async url => {
@@ -43,7 +46,7 @@ const Splash = () => {
       if (Platform.OS == 'android') {
         console.log(response.data?.data?.android_version, 'response.data?.data?.android_version ');
           AsyncStorage.setItem('version',response?.data?.data?.android_version)
-        if (response.data?.data?.android_version > '4.2.11') {
+        if (response.data?.data?.android_version > '4.3.0') {
           setAndroidUrl(response.data?.data?.android_url);
           setModalVisible(true);
         } else {
@@ -53,7 +56,7 @@ const Splash = () => {
         AsyncStorage.setItem('version',response?.data?.data?.ios_version)
        let data=  await AsyncStorage.getItem('Iosversion')
         console.log('thi is ios version ios ..', response?.data?.data?.ios_version);
-        if (response?.data?.data?.ios_version > '4.2.8') {
+        if (response?.data?.data?.ios_version > '4.2.9') {
           setIosUrl(response?.data?.data?.ios_url);
           setModalVisible(true);
         } else {

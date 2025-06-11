@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        
+        // marginTop: -5
     },
     inputGroup: {
         marginBottom: 15,
@@ -166,10 +166,10 @@ const styles = StyleSheet.create({
         zIndex: 999,
     },
     scrollableDropdown: {
-        maxHeight: 200,
+        maxHeight: 180,
     },
     doneButton: {
-        backgroundColor: "#FCDA64",
+        // backgroundColor: "#FCDA64",
         paddingVertical: 10,
         alignItems: "center",
         borderBottomEndRadius: 8,
@@ -184,7 +184,31 @@ const styles = StyleSheet.create({
         color: "#000",
         textAlign: "center",
     },
-     
+     inputView: {
+    height: 38,
+    width: '100%',
+    // marginTop: 5,
+    backgroundColor: '#FFF',
+    paddingHorizontal: 8,
+    borderRadius: 8,
+  },
+  infoDetailSection: {
+    borderWidth: 1,
+    marginVertical: 18,
+    padding: 20,
+    // borderRadius: 10,
+    // height:20,
+    backgroundColor: '#F9F4F1',
+    borderColor: '#FFD387',
+  },
+   HeadingText: {
+    paddingHorizontal:15,
+    marginVertical: 10,
+    fontSize: 22,
+    fontFamily: 'Montserrat-SemiBold',
+    color: '#EEAF2D',
+    marginBottom: -5
+  },
 });
 
 export default styles;

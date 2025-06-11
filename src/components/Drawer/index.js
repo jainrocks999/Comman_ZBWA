@@ -96,6 +96,10 @@ const Drawer = () => {
         navigation.dispatch(DrawerActions.closeDrawer())
         navigation.navigate('Memberdirectory')
     }
+    //  const ManageSwarnaMelaEvent = () => {
+    //     navigation.dispatch(DrawerActions.closeDrawer())
+    //     navigation.navigate('EventEntry')
+    // }
 
     const manageQr = () => {
         navigation.dispatch(DrawerActions.closeDrawer())
@@ -572,7 +576,11 @@ const Drawer = () => {
                     >
                         <Text style={styles.same}>Member Directory & Catalogue</Text>
                     </TouchableOpacity>
-                    
+                     {/* <TouchableOpacity
+                        onPress={() => ManageSwarnaMelaEvent()}
+                    >
+                        <Text style={styles.same}>ZBF Event</Text>
+                    </TouchableOpacity> */}
                     <TouchableOpacity
                         onPress={() => {
                             // Alert.alert("Confirmation","Are you sure you want to sign out ") 

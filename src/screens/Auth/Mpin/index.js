@@ -163,6 +163,7 @@ const Login = () => {
                     </LinearGradient>
                   </TouchableOpacity>
                 </View>
+                 </LinearGradient>
                 <View style={{ alignItems: 'center' }}>
                   <LinearGradient
                     colors={['#AEAEAE', '#969998', '#4A4A4A']}
@@ -218,12 +219,14 @@ const Login = () => {
                           style={styles.mpin}>Login with Password</Text>
                       </View>
                     </View>
-                    <View style={{ marginTop: 50, alignItems: 'flex-end' }}>
+                     </LinearGradient>
+                  
                       <TouchableOpacity
                         onPress={() =>
                           // navigation.replace('Home')
                           userLogin()
-                        }>
+                        }
+                      style={styles.buttonWrapper}>
                         <LinearGradient
                           colors={['#DDAC17', '#FFFA8A', '#ECC440']}
                           start={{ x: 0, y: 0 }}
@@ -233,13 +236,13 @@ const Login = () => {
                           <Arrow />
                         </LinearGradient>
                       </TouchableOpacity>
-                    </View>
+                   
 
 
-                  </LinearGradient>
+                 
                 </View>
 
-              </LinearGradient>
+             
             </View>
           </View>
           <View style={{ height: 140 }} />

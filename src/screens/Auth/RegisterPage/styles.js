@@ -44,12 +44,13 @@ export default StyleSheet.create({
     },
     black:{
       backgroundColor:'#000000',
-      width:'94%',
+      width:'90%',
       height:430,
       borderTopLeftRadius:40,
       borderTopRightRadius:80,
       borderBottomLeftRadius:40,
       borderBottomRightRadius:80,
+        marginTop: -320
     },
     border:{
       borderBottomWidth:1,
@@ -60,19 +61,20 @@ export default StyleSheet.create({
       height:30
     },
     button:{
-      height:65,
-      width:130,
-      borderRadius:20,
-      alignItems:'center',
-      justifyContent:'center',
-      backgroundColor:'#FCDA64',
-      flexDirection:'row',
+       height: 65,
+    width: 130,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FCDA64',
+    flexDirection: 'row',
     },
     signup:{
       color:'#000000',
       fontSize:18,
       fontFamily:'Montserrat-Bold',
-      marginRight:14
+      marginRight:14,
+      
     },
     input:{
       color:'#FFFFFF',
@@ -103,4 +105,9 @@ export default StyleSheet.create({
       fontSize:12,
       fontFamily:'Montserrat-Regular'
     },
+      buttonWrapper: {
+  alignSelf: 'flex-end',
+  marginRight: 0,
+  marginTop: -25, // Adjust this to position the button correctly
+},
 });

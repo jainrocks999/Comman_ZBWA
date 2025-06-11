@@ -61,6 +61,12 @@ import CompanyDetailsScreen from '../screens/Main/Newfolder/membercompanydetail'
 import LoginFirst from '../screens/Auth/FirstPage';
 import OurAchievements from '../screens/Main/HomeComponets/OurAchievements';
 import WhyBecomeDrawer from '../screens/Main/HomeComponets/WhyBecome';
+import EventEntry from '../screens/Main/SwarnaMelaEvent/EventEntry';
+import VisitorResgister from '../screens/Main/SwarnaMelaEvent/VisitorRegister';
+import ExhibitorRegister from '../screens/Main/SwarnaMelaEvent/ExhibitorRegister';
+import CatalogueForm from '../screens/Main/SwarnaMelaEvent/Catalogue';
+import ExhibitorProfile from '../screens/Main/SwarnaMelaEvent/ExhibitorProfile';
+import ExhibitorList from '../screens/Main/SwarnaMelaEvent/ExhibitorList';
 
 const Stack = createStackNavigator();
 function Navigate() {
@@ -79,7 +85,7 @@ function Navigate() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="FirstPage" component={FirstPage} />
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="LoginFirst" component={LoginFirst} />        
+        <Stack.Screen name="LoginFirst" component={LoginFirst} />
         <Stack.Screen name="RegisterPage" component={Register} />
         <Stack.Screen name="Pin" component={Pin} />
         <Stack.Screen name="Forgot" component={ForgotPassword} />
@@ -104,6 +110,14 @@ function Navigate() {
         <Stack.Screen name='Newsletters' component={Newsletters} />
         <Stack.Screen name='CompanyDetailsScreen' component={CompanyDetailsScreen} />
 
+
+        {/* ZBF SCREEN */}
+         <Stack.Screen name='EventEntry' component={EventEntry} />
+          <Stack.Screen name='VisitorResgister' component={VisitorResgister} />
+  <Stack.Screen name='ExhibitorRegister' component={ExhibitorRegister} />
+    <Stack.Screen name='CatalogueForm' component={CatalogueForm} />
+      <Stack.Screen name='ExhibitorProfile' component={ExhibitorProfile} />
+        <Stack.Screen name='ExhibitorList' component={ExhibitorList} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -146,7 +160,7 @@ function Home() {
       <Stack1.Screen name="MyProfile" component={MyProfile} />
       <Stack1.Screen name="OurTeam" component={OurTeam} />
       <Stack1.Screen name="OurAchievements" component={OurAchievements} />
-         <Stack1.Screen name="WhyBecomeDrawer" component={WhyBecomeDrawer} />
+      <Stack1.Screen name="WhyBecomeDrawer" component={WhyBecomeDrawer} />
 
       <Stack1.Screen
         name="MemeberRegistration"

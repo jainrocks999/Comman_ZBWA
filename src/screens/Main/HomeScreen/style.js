@@ -7,6 +7,7 @@ export default StyleSheet.create({
         backgroundColor: '#FFFFFF' 
     },
     header: { 
+       
         height: 45, 
         width: '100%', 
         justifyContent: 'space-between', 

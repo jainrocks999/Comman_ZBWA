@@ -36,7 +36,7 @@ export default StyleSheet.create({
   },
   yellow:{
     height:240,
-    width:'90%',
+    width:'94%',
     backgroundColor:'#FCDA64',
     borderRadius:40,
   },
@@ -65,12 +65,13 @@ export default StyleSheet.create({
   },
   container:{
     backgroundColor:'#000000',
-    width:'94%',
+    width:'90%',
     height:233,
     borderTopLeftRadius:40,
     borderTopRightRadius:80,
     borderBottomLeftRadius:40,
     borderBottomRightRadius:80,
+    marginTop: -170
   },
   padding:{
     paddingHorizontal:40,
@@ -154,4 +155,9 @@ export default StyleSheet.create({
     fontSize:10,
     fontFamily:'Montserrat-Regular'
   },
+      buttonWrapper: {
+  alignSelf: 'flex-end',
+  marginRight: 0,
+  marginTop: -25, // Adjust this to position the button correctly
+},
 });

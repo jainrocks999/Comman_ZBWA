@@ -1608,7 +1608,7 @@ const MemberDirectorys = ({ route }) => {
                             </Text>
                         </Pressable>
                         {dropdownOpen && (
-                            <View style={[styles.dropdownList, { maxHeight: 150 }]}>
+                            <View style={[styles.dropdownList, { maxHeight: 250 }]}>
                                 {jewelryOptions.length > 0 ? (
                                     <FlatList
                                         data={jewelryOptions}

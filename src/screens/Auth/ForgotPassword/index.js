@@ -230,115 +230,117 @@ const ForgotPassword = () => {
                     </LinearGradient>
                   </TouchableOpacity>
                 </View>
-                <View style={{ alignItems: 'center' }}>
-                  <LinearGradient
-                    colors={['#AEAEAE', '#969998', '#4A4A4A']}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
-                    style={styles.container}>
-
-                    <View style={styles.padding}>
-                      <Text style={styles.you}>
-                        You want to change your password?
-                      </Text>
-                      <Text style={styles.forgot}>Forgot Password</Text>
-                      <View style={{ marginTop: 0 }}>
-                        <View style={styles.inputViews}>
-                          <TextInput
-                            contextMenuHidden
-                            style={styles.input}
-                            placeholder="Phone Number"
-                            placeholderTextColor={'#FFFFFF'}
-                            value={mobile}
-                            onChangeText={val => {
-                              const regex = /^\d{0,10}$/;
-                              if (regex.test(val)) {
-                                setMobile(val);
-                              }
-                            }}
-                            keyboardType="number-pad"
-                            maxLength={10}
-                          />
-                          {show ? (
-                            <Edit />
-                          ) : (
-                            <View>
-                              <TouchableOpacity
-
-                                onPress={() => manageSend()}>
-                                <LinearGradient
-                                  colors={['#DDAC17', '#FFFA8A', '#ECC440']}
-                                  start={{ x: 0, y: 0 }}
-                                  end={{ x: 1, y: 0 }}
-                                  style={{
-                                    borderWidth: 1,
-                                    backgroundColor: '#FCDA64',
-                                    paddingHorizontal: 4,
-                                    paddingVertical: 2,
-                                    borderRadius: 6,
-                                  }}>
-                                  <Text style={styles.otpText}>OTP</Text>
-                                </LinearGradient>
-                              </TouchableOpacity>
-                            </View>
-                          )}
-                        </View>
-                      </View>
-                      {show ? (
-                        <View style={{ marginTop: 10 }}>
-                          <OtpInputs
-                            handleChange={code => setCode(code)}
-                            numberOfInputs={6}
-                            // secureTextEntry
-                            // value={code}
-                            defaultValue={code}
-                            autofillFromClipboard={false}
-                            keyboardType={'numeric'}
-                            style={styles.inputView1}
-                            inputContainerStyles={{
-                              width: 35,
-                              alignItems: 'center',
-                            }}
-                            // inputContainerStyles={[styles.otp]}
-                            inputStyles={styles.otp1}
-                          />
-                        </View>
-                      ) : null}
-                      {show ? (
-                        <View style={{ marginTop: 15 }}>
-                          <TouchableOpacity
-                            activeOpacity={0.5}
-                            onPress={() => resendOtp()}>
-                            <Text style={styles.resend}>Resend OTP</Text>
-                          </TouchableOpacity>
-                        </View>
-                      ) : null}
-                    </View>
-                    <View
-                      style={{
-                        marginTop: show ? 27 : 105,
-                        alignItems: 'flex-end',
-                      }}>
-                      <TouchableOpacity
-                        onPress={() => verifyOtp()}
-                        disabled={code ? false : true}
-                        activeOpacity={0.5}
-                      >
-                        <LinearGradient
-                          colors={['#DDAC17', '#FFFA8A', '#ECC440']}
-                          start={{ x: 0, y: 0 }}
-                          end={{ x: 1, y: 0 }}
-                          style={styles.touch}>
-                          <Text style={styles.verify}>Verify</Text>
-                          <Arrow />
-                        </LinearGradient>
-                      </TouchableOpacity>
-                    </View>
-
-                  </LinearGradient>
-                </View>
-
               </LinearGradient>
+              <View style={{ alignItems: 'center' }}>
+                <LinearGradient
+                  colors={['#AEAEAE', '#969998', '#4A4A4A']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.container}>
+
+                  <View style={styles.padding}>
+                    <Text style={styles.you}>
+                      You want to change your password?
+                    </Text>
+                    <Text style={styles.forgot}>Forgot Password</Text>
+                    <View style={{ marginTop: 0 }}>
+                      <View style={styles.inputViews}>
+                        <TextInput
+                          contextMenuHidden
+                          style={styles.input}
+                          placeholder="Phone Number"
+                          placeholderTextColor={'#FFFFFF'}
+                          value={mobile}
+                          onChangeText={val => {
+                            const regex = /^\d{0,10}$/;
+                            if (regex.test(val)) {
+                              setMobile(val);
+                            }
+                          }}
+                          keyboardType="number-pad"
+                          maxLength={10}
+                        />
+                        {show ? (
+                          <Edit />
+                        ) : (
+                          <View>
+                            <TouchableOpacity
+
+                              onPress={() => manageSend()}>
+                              <LinearGradient
+                                colors={['#DDAC17', '#FFFA8A', '#ECC440']}
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 0 }}
+                                style={{
+                                  borderWidth: 1,
+                                  backgroundColor: '#FCDA64',
+                                  paddingHorizontal: 4,
+                                  paddingVertical: 2,
+                                  borderRadius: 6,
+                                }}>
+                                <Text style={styles.otpText}>OTP</Text>
+                              </LinearGradient>
+                            </TouchableOpacity>
+                          </View>
+                        )}
+                      </View>
+                    </View>
+                    {show ? (
+                      <View style={{ marginTop: 10 }}>
+                        <OtpInputs
+                          handleChange={code => setCode(code)}
+                          numberOfInputs={6}
+                          // secureTextEntry
+                          // value={code}
+                          defaultValue={code}
+                          autofillFromClipboard={false}
+                          keyboardType={'numeric'}
+                          style={styles.inputView1}
+                          inputContainerStyles={{
+                            width: 35,
+                            alignItems: 'center',
+                          }}
+                          // inputContainerStyles={[styles.otp]}
+                          inputStyles={styles.otp1}
+                        />
+                      </View>
+                    ) : null}
+                    {show ? (
+                      <View style={{ marginTop: 15 }}>
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={() => resendOtp()}>
+                          <Text style={styles.resend}>Resend OTP</Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : null}
+                  </View>
+                </LinearGradient>
+                {/* <View
+                  style={{
+                    marginTop: show ? 27 : 105,
+                    alignItems: 'flex-end',
+                  }}> */}
+                  <TouchableOpacity
+                    onPress={() => verifyOtp()}
+                    disabled={code ? false : true}
+                    activeOpacity={0.5}
+                 style={styles.buttonWrapper}> 
+                    <LinearGradient
+                      colors={['#DDAC17', '#FFFA8A', '#ECC440']}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 0 }}
+                      style={styles.touch}>
+                      <Text style={styles.verify}>Verify</Text>
+                      <Arrow />
+                    </LinearGradient>
+                  </TouchableOpacity>
+                {/* </View> */}
+
+
+              </View>
+
+
             </View>
           </View>
           <View style={{ height: 140 }} />

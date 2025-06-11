@@ -40,6 +40,8 @@ import Image23 from '../../../assets/HomeImage/image23.svg';
 import Image24 from '../../../assets/HomeImage/image24.svg';
 import Image25 from '../../../assets/HomeImage/image25.svg';
 import Image26 from '../../../assets/HomeImage/image26.svg';
+import Facebook from '../../../assets/HomeImage/facevents.svg';
+import News from '../../../assets/HomeImage/news.svg';
 import Image27 from '../../../assets/HomeImage/image27.svg';
 import Image37 from '../../../assets/HomeImage/members.svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -293,7 +295,7 @@ const HomeScreen = () => {
       // headers: `Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZjU0NzMzMjNkM2U4MDMyN2M3MGJhYSIsIm5hbWUiOiJOYXJlbmRyYSBQYWwiLCJpYXQiOjE3MzMyMjkzMTQsImV4cCI6MTc0MTAwNTMxNH0.PopO_F_H9yc2nBqe6ymzisyGHNvaD2Dve_Ea7m7_ag4`,
     })
       .then(function (response) {
-         console.log('API Response:home', response);
+        console.log('API Response:home', response);
         if (response.data.code == '200') {
           response.data.data.map(item => arr.push({ img: item.banner }));
           setBanner(arr);
@@ -303,7 +305,7 @@ const HomeScreen = () => {
           Toast.show(response.data.message);
         }
       })
-      
+
       .catch(async error => {
         setLoader(false);
         console.log('Error:', error);
@@ -508,6 +510,21 @@ const HomeScreen = () => {
       navigation.navigate('Newsletters');
     }
   };
+
+  const openWhatsApp = (phoneNumber, message = 'Hi') => {
+    if (!phoneNumber) return;
+
+    const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+
+    Linking.openURL(url).catch(() => {
+      if (Platform.OS === 'ios') {
+        Linking.openURL('https://apps.apple.com/us/app/whatsapp-messenger/id310633997');
+      } else {
+        Linking.openURL('https://play.google.com/store/apps/details?id=com.whatsapp');
+      }
+    });
+  };
+
   return (
     <View style={styles.container}>
       {/* <SafeAreaView style={{flex:1}}> */}
@@ -518,6 +535,7 @@ const HomeScreen = () => {
         end={{ x: 1, y: 0 }}
         style={styles.header}>
         {/* <View style={styles.header}> */}
+
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Menu width={25} height={25} />
         </TouchableOpacity>
@@ -718,15 +736,16 @@ const HomeScreen = () => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                Linking.openURL(
-                  `whatsapp://send?text= &phone=  ${contact.whatsapp};`,
-                );
+                openWhatsApp(contact?.whatsapp); // pass number only
                 setVisible(false);
               }}
-              style={styles.touch2}>
+              style={styles.touch2}
+            >
               <Whatsapp />
               <Text style={styles.text}>Whatsapp</Text>
             </TouchableOpacity>
+
+
           </View>
         </View>
       </Modal>
@@ -952,11 +971,11 @@ const data2 = [
   },
 
   {
-    img: <Image26 />,
+    img: <Facebook width={45} height={45} />,
     name: `Facebook Event`,
   },
   {
-    img: <Image26 />,
+    img: <News width={45} height={45} />,
     name: `Newsletter`,
   },
 ];

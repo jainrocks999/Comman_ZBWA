@@ -1,265 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import { View, Text, TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback, ImageBackground, ActivityIndicator, Modal, FlatList, Image, ScrollView, Pressable } from "react-native";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-// import axios from "axios";
-// import styles from "./memberdirectorystyle";
-// import CustomHeader from "../../../components/CustomHeader";
-// import Toast from "react-native-simple-toast";
-// import Constants from "../../../Redux/Constants";
-// const MemberDirectory = ({ navigation }) => {
-//     const [businessName, setBusinessName] = useState("");
-//     const [description, setDescription] = useState("");
-//     const [jewelryType, setJewelryType] = useState("");
-//     const [dropdownOpen, setDropdownOpen] = useState(false);
-//     const [jewelryOptions, setJewelryOptions] = useState([]);
-//     const [loading, setLoading] = useState(false);
-//     const [loadingProfiles, setLoadingProfiles] = useState(false);
-//     const [companyProfiles, setCompanyProfiles] = useState([]);
-//     const [selectedJewelryTypes, setSelectedJewelryTypes] = useState([]);
-
-//     useEffect(() => {
-//         fetchJewelryTypes();
-//     }, []);
-
-//     useEffect(() => {
-//         const timeout = setTimeout(() => {
-//             if (businessName !== "" || description !== "" || selectedJewelryTypes.length > 0) {
-//                 fetchCompanyProfiles();
-//             } else {
-//                 setCompanyProfiles([]);
-//             }
-//         }, 500);
-//         return () => clearTimeout(timeout);
-//     }, [businessName, description, selectedJewelryTypes]);
-
-//     const fetchJewelryTypes = async () => {
-//         const user_token = await AsyncStorage.getItem("user_token");
-//         let config = {
-//             method: "get",
-//             url: `${Constants.MainUrl}member/get/jewellery/types`,
-//             headers: { Authorization: `${user_token}` },
-//         };
-//         setLoading(true);
-//         try {
-//             const response = await axios(config);
-//             if (response.data.code === 200) {
-//                 setJewelryOptions(response.data.data.map(type => type.type));
-//             } else {
-//                 Toast.show("Failed to fetch jewelry types");
-//             }
-//         } catch (error) {
-//             Toast.show("Something went wrong");
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     const fetchCompanyProfiles = async () => {
-//         const user_token = await AsyncStorage.getItem("user_token");
-//         const encodedDescription = encodeURIComponent(description.trim());
-//         const jewelleryTypeQuery = selectedJewelryTypes
-//             .map(type => `jewelleryType=${encodeURIComponent(type.trim())}`)
-//             .join("&");
-//         let url = `${Constants.MainUrl}member/get/company/profile/list?${jewelleryTypeQuery}&shortDescription=${encodedDescription}&companyName=${encodeURIComponent(businessName.trim())}`;
-//         let config = {
-//             method: "get",
-//             url: url,
-//             headers: { Authorization: `${user_token}` },
-//         };
-//         setLoadingProfiles(true);
-//         try {
-//             const response = await axios(config);
-//             if (response.data.code === 200 && Array.isArray(response.data.data?.data)) {
-//                 console.log("Setting companyProfiles:", response.data.data.data);
-//                 setCompanyProfiles(response.data.data.data);
-//             } else {
-//                 console.log("No profiles found!");
-//                 setCompanyProfiles([]);
-//             }
-//         } catch (error) {
-//             console.log("API Error:", error?.response?.data || error);
-//             Toast.show(error.response?.data?.message || "Something went wrong");
-//         } finally {
-//             setLoadingProfiles(false);
-//         }
-//     };
-
-//     const fetchCompanyDetails = async (companyId) => {
-//         console.log('Fetching company details...');
-//         const user_token = await AsyncStorage.getItem("user_token");
-//         console.log('User Token:', user_token);
-//         let url = `${Constants.MainUrl}member/get/company/profile/details/${companyId}`;
-//         let config = {
-//             method: "get",
-//             url: url,
-//             headers: { Authorization: `${user_token}` },
-//         };
-//         setLoadingProfiles(true);
-//         try {
-//             const response = await axios(config);
-//             if (response.data.code === 200 && response.data.data) {
-//                 navigation.navigate("CompanyDetailsScreen", { companyData: response.data.data });
-//             } else {
-//                 Toast.show("No details found");
-//             }
-//         } catch (error) {
-//             console.log("API Error:", error);
-//             Toast.show(error.response?.data?.message || "Something went wrong");
-//         } finally {
-//             setLoadingProfiles(false);
-//         }
-//     };
-//     const filteredOptions = jewelryOptions.filter(option =>
-//         option.toLowerCase().includes(jewelryType.trim().toLowerCase())
-//     );
-
-//     const toggleSelection = (option) => {
-//         setSelectedJewelryTypes((prevSelected) => {
-//             if (prevSelected.includes(option)) {
-//                 return prevSelected.filter((item) => item !== option);
-//             } else {
-//                 return [...prevSelected, option];
-//             }
-//         });
-//     };
-
-//     return (
-//         <TouchableWithoutFeedback onPress={() => {
-//             Keyboard.dismiss();
-//             console.log("Closing Dropdown");
-//             setDropdownOpen(false);
-//         }} accessible={false}>
-//             <ImageBackground
-//                 source={require("../../../assets/Logo/background.png")}
-//                 style={styles.background}
-//             >
-//                 <CustomHeader
-//                     title="Member Directory & Catalogue"
-//                     onPress={() => navigation.goBack()}
-//                     onPress2={() => navigation.navigate("Notification")}
-//                 />
-//                 <View style={styles.container}>
-//                     <View style={styles.inputGroup}>
-//                         <Text style={styles.label}>Business Name</Text>
-//                         <TextInput
-//                             style={[styles.input, { color: "#000" }]}
-//                             placeholder="Enter Business Name..."
-//                             placeholderTextColor="#888"
-//                             value={businessName}
-//                             onChangeText={setBusinessName}
-//                             onFocus={() => setDropdownOpen(false)}
-//                         />
-//                     </View>
-//                     <View style={styles.inputGroup}>
-//                         <Text style={styles.label}>Short Description</Text>
-//                         <TextInput
-//                             style={[styles.input, styles.textArea, { color: "#000" }]}
-//                             placeholder="Enter Short Description..."
-//                             placeholderTextColor="#888"
-//                             value={description}
-//                             onChangeText={setDescription}
-//                             multiline
-//                             onFocus={() => setDropdownOpen(false)}
-//                         />
-//                     </View>
-//                     <View style={styles.inputGroup}>
-//                         <Text style={styles.label}>Jewellery Type</Text>
-
-//                         <TouchableOpacity
-//                             style={styles.dropdown}
-//                             onPress={() => {
-//                                 Keyboard.dismiss();
-//                                 console.log("Dropdown Open State Before:", dropdownOpen);
-//                                 setDropdownOpen(!dropdownOpen);
-//                                 console.log("Dropdown Open State After:", !dropdownOpen);
-//                             }}>
-//                             <Text style={[styles.dropdownText, { color: selectedJewelryTypes.length > 0 ? "#000" : "#888" }]}>
-//                                 {selectedJewelryTypes.length > 0 ? selectedJewelryTypes.join(", ") : "Select Jewellery Type..."}
-//                             </Text>
-//                         </TouchableOpacity>
-//                         {dropdownOpen && (
-//                             <View style={styles.dropdownContainer}>
-//                                 {loading ? (
-//                                     <ActivityIndicator size="small" color="#FCDA64" />
-//                                 ) : (
-//                                     <ScrollView
-//                                         nestedScrollEnabled={true}
-//                                         style={styles.scrollableDropdown}
-//                                         keyboardShouldPersistTaps="handled"
-//                                     >
-//                                         {jewelryOptions.map((option, index) => (
-//                                             <Pressable key={index} style={styles.dropdownItem}
-//                                                 onPress={() => toggleSelection(option)}>
-//                                                 <View style={styles.checkboxContainer}>
-//                                                     <View style={selectedJewelryTypes.includes(option) ? styles.checkboxSelected : styles.checkbox}>
-//                                                         {selectedJewelryTypes.includes(option) && <View style={styles.innerSquare} />}
-//                                                     </View>
-//                                                     <Text style={styles.dropdownItemText}>{option}</Text>
-//                                                 </View>
-//                                             </Pressable>
-//                                         ))}
-//                                     </ScrollView>
-//                                 )}
-
-//                                 <Pressable
-//                                     style={styles.doneButton}
-//                                     onPress={() => {
-//                                         if (selectedJewelryTypes.length > 0 || businessName || description) {
-//                                             fetchCompanyProfiles(selectedJewelryTypes);
-//                                         } else {
-//                                             setCompanyProfiles([]);
-//                                         }
-//                                         setDropdownOpen(false);
-//                                     }}
-//                                 >
-
-//                                     <Text style={styles.doneButtonText}>Done</Text>
-//                                 </Pressable>
-//                             </View>
-//                         )}
-
-//                     </View>
-
-//                     {loadingProfiles ? (
-//                         <View style={{ flex: 1, justifyContent: "center", alignItems: "center", marginTop: 20 }}>
-//                             <ActivityIndicator size="large" color="#FCDA64" />
-//                         </View>
-//                     ) : companyProfiles.length > 0 ? (
-//                         <FlatList
-//                             data={companyProfiles}
-//                             keyExtractor={(item, index) => index.toString()}
-//                             renderItem={({ item }) => (
-//                                 <TouchableOpacity style={styles.companyCard} onPress={() => {
-//                                     if (item.user_id?._id) {
-//                                         fetchCompanyDetails(item.user_id._id);
-//                                     } else {
-//                                         Toast.show("User ID not available");
-//                                     }
-//                                 }}>
-//                                     <Image source={{ uri: item.company_logo }} style={styles.companyLogo} />
-//                                     <View style={styles.companyInfo}>
-//                                         <Text style={styles.companyName}>{item.company_name}</Text>
-//                                         <Text style={styles.companyDescription}>{item.short_description}</Text>
-//                                         <Text style={[styles.companyDescription, { lineHeight: 22 }]}>
-//                                             {Array.isArray(item.type_of_jewellery) ? item.type_of_jewellery.join(", ") : item.type_of_jewellery}
-//                                         </Text>
-//                                         <Text style={styles.companyContact}>{item.contact}</Text>
-//                                     </View>
-//                                 </TouchableOpacity>
-//                             )}
-//                         />
-//                     ) : (
-//                         <View style={{ flex: 1, justifyContent: "center", alignItems: "center", marginTop: 20 }}>
-//                             <Text style={{ color: "#777", fontSize: 16 }}>No Profiles Found</Text>
-//                         </View>
-//                     )}
-//                 </View>
-//             </ImageBackground>
-//         </TouchableWithoutFeedback>
-//     );
-// };
-// export default MemberDirectory;
-
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -274,6 +12,7 @@ import {
   Image,
   ScrollView,
   Pressable,
+  BackHandler,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -281,9 +20,11 @@ import styles from './memberdirectorystyle';
 import CustomHeader from '../../../components/CustomHeader';
 import Toast from 'react-native-simple-toast';
 import Constants from '../../../Redux/Constants';
-import SearchIcon from '../../../assets/Icon/search5.svg';
+import SearchIcon from '../../../assets/Icon/Vector.svg';
+import Filter from '../../../assets/Icon/filter.svg';
 import LinearGradient from 'react-native-linear-gradient';
-
+import { useFocusEffect } from '@react-navigation/native';
+import DropdownIcon from '../../../assets/Icon/Vectors.svg'
 const MemberDirectory = ({ navigation }) => {
   const [businessName, setBusinessName] = useState('');
   const [description, setDescription] = useState('');
@@ -295,6 +36,40 @@ const MemberDirectory = ({ navigation }) => {
   const [selectedJewelryTypes, setSelectedJewelryTypes] = useState([]);
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [allProfiles, setAllProfiles] = useState([]);
+  const [searchName, setSearchName] = useState('');
+  const [filteredProfiles, setFilteredProfiles] = useState([]);
+const [noResultFound, setNoResultFound] = useState(false);
+ 
+useEffect(() => {
+  if (!isSearchMode) {
+    setLoadingProfiles(true); 
+    setNoResultFound(false); 
+
+    const timeout = setTimeout(() => {
+      const lower = searchName.trim().toLowerCase();
+
+      if (lower === '') {
+        setFilteredProfiles(allProfiles);
+        setNoResultFound(false); 
+      } else {
+        const filtered = allProfiles.filter(profile =>
+          profile.company_name?.toLowerCase().includes(lower) 
+          // profile.short_description?.toLowerCase().includes(lower)
+        );
+
+        setFilteredProfiles(filtered);
+        setNoResultFound(filtered.length === 0); // agar kuch bhi na mila
+      }
+
+      setLoadingProfiles(false);
+    }, 300);
+
+    return () => {
+      clearTimeout(timeout);
+      setLoadingProfiles(false);
+    };
+  }
+}, [searchName, allProfiles, isSearchMode]);
 
   useEffect(() => {
     fetchJewelryTypes();
@@ -451,214 +226,232 @@ const MemberDirectory = ({ navigation }) => {
         : [...prevSelected, option],
     );
   };
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        if (isSearchMode) {
+          setIsSearchMode(false);
+          return true;
+        }
+        return false;
+      };
 
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [isSearchMode])
+  );
   return (
     <Pressable
-      style={{ flex: 1 , }}          // पूरा area कवर करे
+      style={{ flex: 1, }}
       onPress={() => {
         Keyboard.dismiss();
         setDropdownOpen(false);
       }}>
-      {/* // <TouchableWithoutFeedback
-    //   onPress={() => {
-    //     Keyboard.dismiss();
-    //     setDropdownOpen(false);
-    //   }}
-    //   accessible={false}
-    //   > */}
-
-<View style={[styles.background, { backgroundColor: isSearchMode ? '#F9F4F1' : '#FFFFFF' }]}>
-        {/* <CustomHeader
-          title="Member Directory & Catalogue"
-          onPress={() => navigation.goBack()}
-        /> */}
+      <View style={[styles.background, { backgroundColor: isSearchMode ? '#F9F4F1' : '#FFFFFF' }]}>
         <CustomHeader
-          title={isSearchMode ? 'Search' : 'Member Directory & Catalogue'}
-          onPress={() => navigation.goBack()}
+          title={''}
+          onPress={() => {
+            if (isSearchMode) {
+              setIsSearchMode(false);
+            } else {
+              navigation.goBack();
+            }
+          }}
+          onPress2={() => navigation.navigate('Notification')}
         />
-
-        {/* Search Icon Button just below header */}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            paddingHorizontal: 10,
-            // paddingVertical: 8,
-            marginTop: 10,
-            marginBottom: -10,
-          }}>
-          <TouchableOpacity
-            onPress={() => setIsSearchMode(prev => !prev)}
-            style={{
-              padding: 6,
-              backgroundColor: '#F9F4F1',
-              borderRadius: 6,
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 36,
-              height: 36,
-              borderWidth: 2,
-              borderColor: '#FFD387'
-            }} >
-
-            <SearchIcon width={25} />
-
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.container}>
-          {isSearchMode && (
-            <>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Business Name</Text>
+        <ScrollView style={{ flexGrow: 1, paddingHorizontal: 0 }}>
+          <Text style={styles.HeadingText}>Member Directory & Catalogue</Text>
+          {!isSearchMode && (
+            <TouchableOpacity
+              style={[styles.infoDetailSection, { paddingVertical: 15 }]}>
+              <View style={[styles.inputView, { flexDirection: 'row', alignItems: "center", gap: 5, paddingHorizontal: 10 }]}>
+                <SearchIcon height={20} />
                 <TextInput
-                  style={[styles.input, { color: '#000' }]}
-                  placeholder="Enter Business Name..."
-                  placeholderTextColor="#888"
-                  value={businessName}
-                  onChangeText={setBusinessName}
-                  onFocus={() => setDropdownOpen(false)}
+                  value={searchName}
+                  onChangeText={text => setSearchName(text)}
+                  placeholder="Search..."
+                  placeholderTextColor={'#ADAEBC'}
+                  style={{
+                    color: '#000000',
+                    fontSize: 14,
+                    fontFamily: 'Montserrat-Medium',
+                    width: '80%',
+                  }}
                 />
-              </View>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Short Description</Text>
-                <TextInput
-                  style={[
-                    styles.input,
-                    styles.textArea,
-                    { color: '#000', textAlignVertical: 'top' },
-                  ]}
-                  placeholder="Enter Short Description..."
-                  placeholderTextColor="#888"
-                  value={description}
-                  onChangeText={setDescription}
-                  multiline
-                  onFocus={() => setDropdownOpen(false)}
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Jewellery Type</Text>
                 <TouchableOpacity
-                  style={styles.dropdown}
-                  // onPress={() => setDropdownOpen(!dropdownOpen)}>
-                  onPress={() => {
-                    Keyboard.dismiss();
-                    setDropdownOpen(!dropdownOpen);
-                  }}>
-                  <Text
-                    style={[
-                      styles.dropdownText,
-                      {
-                        color:
-                          selectedJewelryTypes.length > 0 ? '#000' : '#888',
-                      },
-                    ]}>
-                    {selectedJewelryTypes.length > 0
-                      ? selectedJewelryTypes.join(', ')
-                      : 'Select Jewellery Type...'}
-                  </Text>
+                  onPress={() => setIsSearchMode(prev => !prev)}
+                >
+                  <Filter height={25} />
                 </TouchableOpacity>
-                {dropdownOpen && (
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      Keyboard.dismiss();
-                      setDropdownOpen(false);
-                    }}>
-
-                    <View style={styles.dropdownContainer}>
-                      {loading ? (
-                        <ActivityIndicator size="small" color="#FCDA64" />
-                      ) : (
-                        <ScrollView
-                          nestedScrollEnabled
-                          style={styles.scrollableDropdown}
-                          keyboardShouldPersistTaps="handled">
-                          {jewelryOptions.map((option, index) => (
-                            <Pressable
-                              key={index}
-                              style={styles.dropdownItem}
-                              onPress={() => toggleSelection(option)}>
-                              <View style={styles.checkboxContainer}>
-                                <View
-                                  style={
-                                    selectedJewelryTypes.includes(option)
-                                      ? styles.checkboxSelected
-                                      : styles.checkbox
-                                  }>
-                                  {selectedJewelryTypes.includes(option) && (
-                                    <View style={styles.innerSquare} />
-                                  )}
-                                </View>
-                                <Text style={styles.dropdownItemText}>
-                                  {option}
-                                </Text>
-                              </View>
-                            </Pressable>
-                          ))}
-                        </ScrollView>
-                      )}
-                      <Pressable
-                        style={styles.doneButton}
-                        onPress={() => {
-                          fetchCompanyProfiles();
-                          setDropdownOpen(false);
-                        }}>
-                        <Text style={styles.doneButtonText}>Done</Text>
-                      </Pressable>
-                    </View>
-
-                  </TouchableWithoutFeedback>
-                )}
-
               </View>
-            </>
+            </TouchableOpacity>
+
           )}
 
-          {loadingProfiles ? (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: 20,
-              }}>
-              <ActivityIndicator size="large" color="#FCDA64" />
-            </View>
-          ) : (
-            <FlatList
-              data={
-                isSearchMode
-                  ? businessName !== '' ||
-                    description !== '' ||
-                    selectedJewelryTypes.length > 0
-                    ? companyProfiles
-                    : []
-                  : allProfiles
-              }
-              keyExtractor={(item, index) => index.toString()}
-              ListEmptyComponent={() => (
-                <View style={{ marginTop: 30, alignItems: 'center' }}>
-                  <Text style={{ color: '#777' }}>
-                    {isSearchMode ? 'No Results Found' : 'No Profiles Found'}
-                  </Text>
-                </View>
-              )}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.companyCard}
-                  onPress={() => {
-                    if (item.user_id?._id) {
-                      fetchCompanyDetails(item.user_id._id);
-                    } else {
-                      Toast.show('User ID not available');
-                    }
-                  }}>
-                  <Image
-                    source={{ uri: item.company_logo }}
-                    style={styles.companyLogo}
+          <View style={styles.container}>
+            {isSearchMode && (
+              <>
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Business Name</Text>
+                  <TextInput
+                    style={[styles.input, { color: '#000' }]}
+                    placeholder="Enter Business Name..."
+                    placeholderTextColor="#888"
+                    value={businessName}
+                    onChangeText={setBusinessName}
+                    onFocus={() => setDropdownOpen(false)}
                   />
-                  <View style={styles.companyInfo}>
-                    {/* <Text style={styles.companyName}>{item.company_name}</Text>
+                </View>
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Short Description</Text>
+                  <TextInput
+                    style={[
+                      styles.input,
+                      styles.textArea,
+                      { color: '#000', textAlignVertical: 'top' },
+                    ]}
+                    placeholder="Enter Short Description..."
+                    placeholderTextColor="#888"
+                    value={description}
+                    onChangeText={setDescription}
+                    multiline
+                    onFocus={() => setDropdownOpen(false)}
+                  />
+                </View>
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Jewellery Type</Text>
+                  <TouchableOpacity
+                    style={styles.dropdown}
+                    // onPress={() => setDropdownOpen(!dropdownOpen)}>
+                    onPress={() => {
+                      Keyboard.dismiss();
+                      setDropdownOpen(!dropdownOpen);
+                    }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <Text
+                        style={[
+                          styles.dropdownText,
+                          {
+                            color:
+                              selectedJewelryTypes.length > 0 ? '#000' : '#888',
+                          },
+                        ]}>
+                        {selectedJewelryTypes.length > 0
+                          ? selectedJewelryTypes.join(', ')
+                          : 'Select Jewellery Type...'}
+                      </Text>
+                      <DropdownIcon height={14} width={14} />
+                    </View>
+                  </TouchableOpacity>
+                  {dropdownOpen && (
+                    <TouchableWithoutFeedback
+                      onPress={() => {
+                        Keyboard.dismiss();
+                        setDropdownOpen(false);
+                      }}>
+
+                      <View style={styles.dropdownContainer}>
+                        {loading ? (
+                          <ActivityIndicator size="small" color="#FCDA64" />
+                        ) : (
+                          <ScrollView
+                            nestedScrollEnabled
+                            style={styles.scrollableDropdown}
+                            keyboardShouldPersistTaps="handled">
+                            {jewelryOptions.map((option, index) => (
+                              <Pressable
+                                key={index}
+                                style={styles.dropdownItem}
+                                onPress={() => toggleSelection(option)}>
+                                <View style={styles.checkboxContainer}>
+                                  <View
+                                    style={
+                                      selectedJewelryTypes.includes(option)
+                                        ? styles.checkboxSelected
+                                        : styles.checkbox
+                                    }>
+                                    {selectedJewelryTypes.includes(option) && (
+                                      <View style={styles.innerSquare} />
+                                    )}
+                                  </View>
+                                  <Text style={styles.dropdownItemText}>
+                                    {option}
+                                  </Text>
+                                </View>
+                              </Pressable>
+                            ))}
+                          </ScrollView>
+                        )}
+                        <Pressable
+
+                          onPress={() => {
+                            fetchCompanyProfiles();
+                            setDropdownOpen(false);
+                          }}>
+                          <LinearGradient
+                            colors={['#DDAC17', '#FFFA8A', '#ECC440']}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 0 }}
+                            style={styles.doneButton}>
+                            <Text style={styles.doneButtonText}>Done</Text>
+                          </LinearGradient>
+                        </Pressable>
+                      </View>
+
+                    </TouchableWithoutFeedback>
+                  )}
+
+                </View>
+              </>
+            )}
+
+            {loadingProfiles ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 20,
+                }}>
+                <ActivityIndicator size="large" color="#FCDA64" />
+              </View>
+            ) : (
+              <FlatList
+                data={
+                  isSearchMode
+                    ? businessName !== '' ||
+                      description !== '' ||
+                      selectedJewelryTypes.length > 0
+                      ? companyProfiles
+                      : []
+                    : filteredProfiles
+                }
+                keyExtractor={(item, index) => index.toString()}
+                ListEmptyComponent={() => (
+                  <View style={{ marginTop: 30, alignItems: 'center' }}>
+                    <Text style={{ color: '#777' }}>
+                      {isSearchMode ? 'No Results Found' : 'No Profiles Found'}
+                    </Text>
+                  </View>
+                )}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.companyCard}
+                    onPress={() => {
+                      if (item.user_id?._id) {
+                        fetchCompanyDetails(item.user_id._id);
+                      } else {
+                        Toast.show('User ID not available');
+                      }
+                    }}>
+                    <Image
+                      source={{ uri: item.company_logo }}
+                      style={styles.companyLogo}
+                    />
+                    <View style={styles.companyInfo}>
+                      {/* <Text style={styles.companyName}>{item.company_name}</Text>
                     <Text style={styles.companyDescription}>
                       {item.short_description}
                     </Text>
@@ -667,39 +460,40 @@ const MemberDirectory = ({ navigation }) => {
                         ? item.type_of_jewellery.join(', ')
                         : item.type_of_jewellery}
                     </Text> */}
-                    <Text style={styles.companyName}>
-                      {item.company_name?.length > 20
-                        ? item.company_name.substring(0, 20) + '...'
-                        : item.company_name}
-                    </Text>
+                      <Text style={styles.companyName}>
+                        {item.company_name?.length > 20
+                          ? item.company_name.substring(0, 20) + '...'
+                          : item.company_name}
+                      </Text>
 
-                    <Text style={styles.companyDescription}>
-                      {item.short_description?.length > 20
-                        ? item.short_description.substring(0, 20) + '...'
-                        : item.short_description}
-                    </Text>
+                      <Text style={styles.companyDescription}>
+                        {item.short_description?.length > 20
+                          ? item.short_description.substring(0, 20) + '...'
+                          : item.short_description}
+                      </Text>
 
-                    <Text style={[styles.companyDescription, { lineHeight: 22 }]}>
-                      {(Array.isArray(item.type_of_jewellery)
-                        ? item.type_of_jewellery.join(', ')
-                        : item.type_of_jewellery
-                      )?.length > 20
-                        ? (Array.isArray(item.type_of_jewellery)
+                      <Text style={[styles.companyDescription, { lineHeight: 22 }]}>
+                        {(Array.isArray(item.type_of_jewellery)
                           ? item.type_of_jewellery.join(', ')
                           : item.type_of_jewellery
-                        ).substring(0, 20) + '...'
-                        : Array.isArray(item.type_of_jewellery)
-                          ? item.type_of_jewellery.join(', ')
-                          : item.type_of_jewellery}
-                    </Text>
+                        )?.length > 20
+                          ? (Array.isArray(item.type_of_jewellery)
+                            ? item.type_of_jewellery.join(', ')
+                            : item.type_of_jewellery
+                          ).substring(0, 20) + '...'
+                          : Array.isArray(item.type_of_jewellery)
+                            ? item.type_of_jewellery.join(', ')
+                            : item.type_of_jewellery}
+                      </Text>
 
-                    <Text style={styles.companyContact}>{item.contact}</Text>
-                  </View>
-                </TouchableOpacity>
-              )}
-            />
-          )}
-        </View>
+                      <Text style={styles.companyContact}>{item.contact}</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+          </View>
+        </ScrollView>
       </View>
       {/* </TouchableWithoutFeedback> */}
     </Pressable>
