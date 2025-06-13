@@ -26,8 +26,10 @@ import HTMLView from 'react-native-htmlview';
 import Constants from '../../Redux/Constants';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LinearGradient from 'react-native-linear-gradient';
+import WebView from 'react-native-webview';
 
 const Documentation = ({ onPress }) => {
+  const [webViewHeight, setWebViewHeight] = useState(100); 
   const [visible1, setVisible1] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
@@ -707,24 +709,75 @@ const Documentation = ({ onPress }) => {
           <Modal isVisible={isVisible}>
             <View
               style={{
-                backgroundColor: '#FDEDB1',
-                borderRadius: 16,
-                paddingBottom: 20,
+                // backgroundColor: '#FDEDB1',
+                backgroundColor: '#FFFFFF',
+                borderRadius: 10,
+                paddingBottom: -20,
+                marginTop: 100
               }}>
               <TouchableOpacity
                 onPress={() => setVisible(false)}
                 style={{ alignSelf: 'flex-end', margin: 5 }}>
                 <CircleCross />
               </TouchableOpacity>
-              <ScrollView style={{ padding: 20 }}>
-                {data ? (
+              <ScrollView style={{ padding: 10 }}>
+                {/* {data ? (
                   <HTMLView
                     value={data
                       .trim()
                       .replace(new RegExp('<p>', 'g'), '<span>')}
                     addLineBreaks={false}
                   />
-                ) : null}
+                ) : null} */}
+               {/* <ScrollView contentContainerStyle={{ padding: 12 }} showsVerticalScrollIndicator={false}> */}
+        <View style={styles.cardContainer}>
+          {data ? (
+            <WebView
+              originWhitelist={['*']}
+              source={{
+                html: `
+                  <html>
+                    <head>
+                      <meta name="viewport" content="width=device-width, initial-scale=1" />
+                      <style>
+                        * {
+                          margin: 0;
+                          padding: 0;
+                          box-sizing: border-box;
+                        }
+                        body {
+                          padding: 10px;
+                          background-color: transparent;
+                        }
+                      </style>
+                      <script>
+                        window.onload = function() {
+                          window.ReactNativeWebView.postMessage(
+                            document.documentElement.scrollHeight.toString()
+                          );
+                        };
+                      </script>
+                    </head>
+                    <body>
+                      ${data.trim()}
+                    </body>
+                  </html>
+                `,
+              }}
+              style={{ height: webViewHeight, backgroundColor: 'transparent' }}
+              javaScriptEnabled={true}
+              domStorageEnabled={true}
+              scrollEnabled={false}
+              onMessage={event => {
+                const height = parseInt(event.nativeEvent.data);
+                if (!isNaN(height)) {
+                  setWebViewHeight(height + 20); // Add extra spacing
+                }
+              }}
+            />
+          ) : null}
+        </View>
+      {/* </ScrollView> */}
                 <View style={{ height: 30 }} />
               </ScrollView>
             </View>
@@ -1256,5 +1309,17 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontFamily: 'Montserrat-Medium',
     fontSize: 14,
+  },
+   cardContainer: {
+    borderWidth: 1,
+    borderColor: '#FFD387',
+    backgroundColor: '#F9F4F1',
+    borderRadius: 12,
+    elevation: 4,
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
   },
 });
