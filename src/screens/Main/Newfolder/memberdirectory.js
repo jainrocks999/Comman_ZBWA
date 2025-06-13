@@ -38,38 +38,38 @@ const MemberDirectory = ({ navigation }) => {
   const [allProfiles, setAllProfiles] = useState([]);
   const [searchName, setSearchName] = useState('');
   const [filteredProfiles, setFilteredProfiles] = useState([]);
-const [noResultFound, setNoResultFound] = useState(false);
- 
-useEffect(() => {
-  if (!isSearchMode) {
-    setLoadingProfiles(true); 
-    setNoResultFound(false); 
+  const [noResultFound, setNoResultFound] = useState(false);
 
-    const timeout = setTimeout(() => {
-      const lower = searchName.trim().toLowerCase();
+  useEffect(() => {
+    if (!isSearchMode) {
+      setLoadingProfiles(true);
+      setNoResultFound(false);
 
-      if (lower === '') {
-        setFilteredProfiles(allProfiles);
-        setNoResultFound(false); 
-      } else {
-        const filtered = allProfiles.filter(profile =>
-          profile.company_name?.toLowerCase().includes(lower) 
-          // profile.short_description?.toLowerCase().includes(lower)
-        );
+      const timeout = setTimeout(() => {
+        const lower = searchName.trim().toLowerCase();
 
-        setFilteredProfiles(filtered);
-        setNoResultFound(filtered.length === 0); // agar kuch bhi na mila
-      }
+        if (lower === '') {
+          setFilteredProfiles(allProfiles);
+          setNoResultFound(false);
+        } else {
+          const filtered = allProfiles.filter(profile =>
+            profile.company_name?.toLowerCase().includes(lower)
+            // profile.short_description?.toLowerCase().includes(lower)
+          );
 
-      setLoadingProfiles(false);
-    }, 300);
+          setFilteredProfiles(filtered);
+          setNoResultFound(filtered.length === 0); // agar kuch bhi na mila
+        }
 
-    return () => {
-      clearTimeout(timeout);
-      setLoadingProfiles(false);
-    };
-  }
-}, [searchName, allProfiles, isSearchMode]);
+        setLoadingProfiles(false);
+      }, 300);
+
+      return () => {
+        clearTimeout(timeout);
+        setLoadingProfiles(false);
+      };
+    }
+  }, [searchName, allProfiles, isSearchMode]);
 
   useEffect(() => {
     fetchJewelryTypes();
@@ -242,6 +242,18 @@ useEffect(() => {
         BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     }, [isSearchMode])
   );
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+      if (isSearchMode) {
+        e.preventDefault(); // Stop back action
+        setIsSearchMode(false); // Just exit search mode
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, isSearchMode]);
+
   return (
     <Pressable
       style={{ flex: 1, }}

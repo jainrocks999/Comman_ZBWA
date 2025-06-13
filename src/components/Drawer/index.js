@@ -277,6 +277,7 @@ const Drawer = () => {
 
     const manageSignIn = async () => {
         const data1 = await AsyncStorage.getItem('version')
+        //  const data1 = await AsyncStorage.getItem(Platform.OS=='android'?'version':'Iosversion')
         console.log(data1 ,'data1...............');
         
         const userName = await AsyncStorage.getItem(Storage.username)

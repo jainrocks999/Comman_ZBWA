@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,8 @@ import Claendar from '../../assets/Icon/Calendar.svg';
 import Toast from 'react-native-simple-toast';
 import Storage from '../../components/LocalStorage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import LinearGradient from 'react-native-linear-gradient';
 
 const PersonalDetail = () => {
   const [date, setDate] = useState(new Date());
@@ -122,20 +123,19 @@ const PersonalDetail = () => {
   }
 
   return (
-    <ImageBackground
-      source={require('../../assets/Logo/background.png')}
-      style={styles.container}>
-      <ScrollView style={{flex: 1}}>
+
+    <View style={styles.container}>
+      <ScrollView style={{ flex: 1 }}>
         <KeyboardAwareScrollView
           extraScrollHeight={Platform.OS == 'android' ? -200 : 100}
           enableOnAndroid={true}
           keyboardShouldPersistTaps="handled"
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          contentContainerStyle={{flexGrow: 1}}>
+          contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.main}>
             <View style={{}}>
               <Text style={styles.heading}>
-                Address <Text style={{color: 'red'}}>*</Text>
+                Address <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <View style={styles.inputView}>
                 <TextInput
@@ -151,9 +151,9 @@ const PersonalDetail = () => {
                 />
               </View>
             </View>
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <Text style={styles.heading}>
-                Location <Text style={{color: 'red'}}>*</Text>
+                Location <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <View style={styles.inputView}>
                 <TextInput
@@ -169,9 +169,9 @@ const PersonalDetail = () => {
                 />
               </View>
             </View>
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <Text style={styles.heading}>
-                Pincode <Text style={{color: 'red'}}>*</Text>
+                Pincode <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <View style={styles.inputView}>
                 <TextInput
@@ -189,13 +189,13 @@ const PersonalDetail = () => {
                 />
               </View>
             </View>
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <Text style={styles.heading}>
-                Phone Number <Text style={{color: 'red'}}>*</Text>
+                Phone Number <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <View style={styles.inputView}>
                 <TextInput
-                contextMenuHidden
+                  contextMenuHidden
                   value={phone}
                   onChangeText={val => {
                     const regex = /^\d{0,10}$/;
@@ -215,9 +215,9 @@ const PersonalDetail = () => {
                 />
               </View>
             </View>
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <Text style={styles.heading}>
-                Email <Text style={{color: 'red'}}>*</Text>
+                Email <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <View style={styles.inputView}>
                 <TextInput
@@ -234,18 +234,18 @@ const PersonalDetail = () => {
                 />
               </View>
             </View>
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <Text style={styles.heading}>
-                Emergency Number <Text style={{color: 'red'}}>*</Text>
+                Emergency Number <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <View style={styles.inputView}>
                 <TextInput
-                contextMenuHidden
+                  contextMenuHidden
                   value={emergencyNumber}
-                  onChangeText={val =>{
+                  onChangeText={val => {
                     const regex = /^\d{0,10}$/;
-                    if (regex.test(val)) { 
-                    setEmergencyNumber(val)
+                    if (regex.test(val)) {
+                      setEmergencyNumber(val)
                     }
                   }}
                   style={{
@@ -261,9 +261,9 @@ const PersonalDetail = () => {
               </View>
             </View>
             <View>
-              <View style={{marginTop: 15}}>
+              <View style={{ marginTop: 15 }}>
                 <Text style={styles.heading}>
-                  DOB <Text style={{color: 'red'}}>*</Text>
+                  DOB <Text style={{ color: 'red' }}>*</Text>
                 </Text>
                 <TouchableOpacity
                   onPress={() => setOpen(true)}
@@ -273,17 +273,22 @@ const PersonalDetail = () => {
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <View>
                 <TouchableOpacity
-                  onPress={() => handleAdd()}
-                  style={styles.buttton}>
-                  <Text style={styles.text}> Add More </Text>
+                  onPress={() => handleAdd()}>
+                  <LinearGradient
+                    colors={['#DDAC17', '#FFFA8A', '#ECC440']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={styles.buttton}>
+                    <Text style={styles.text}> Add More </Text>
+                  </LinearGradient>
                 </TouchableOpacity>
               </View>
               {fields.map((field, idx) => {
                 return (
-                  <View style={{marginTop: 10}}>
+                  <View style={{ marginTop: 10 }}>
                     <Text style={styles.heading}>
                       Members of Any Other Organisation
                     </Text>
@@ -299,27 +304,33 @@ const PersonalDetail = () => {
                         },
                       ]}>
                       <TextInput
-                        style={{width: '90%'}}
+                        style={{ width: '90%' }}
                         value={field || ''}
                         onChangeText={e => handleChange(idx, e)}
                       />
                       <TouchableOpacity
-                        style={{
-                          backgroundColor: '#FCDA64',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          paddingHorizontal: 6,
-                          paddingVertical: 4,
-                        }}
+
                         onPress={() => handleRemove(idx)}>
-                        <Text
+                        <LinearGradient
+                          colors={['#DDAC17', '#FFFA8A', '#ECC440']}
+                          start={{ x: 0, y: 0 }}
+                          end={{ x: 1, y: 0 }}
                           style={{
-                            fontSize: 11,
-                            fontFamily: 'Montserrat-Bold',
-                            color: '#fff',
+                            backgroundColor: '#FCDA64',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            paddingHorizontal: 6,
+                            paddingVertical: 4,
                           }}>
-                          Remove
-                        </Text>
+                          <Text
+                            style={{
+                              fontSize: 11,
+                              fontFamily: 'Montserrat-Bold',
+                              color: '#fff',
+                            }}>
+                            Remove
+                          </Text>
+                        </LinearGradient>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -336,9 +347,14 @@ const PersonalDetail = () => {
               justifyContent: 'center',
             }}>
             <TouchableOpacity
-              onPress={() => handlePersonalDetails()}
-              style={styles.touch1}>
-              <Text style={styles.text}>Submit</Text>
+              onPress={() => handlePersonalDetails()}>
+              <LinearGradient
+                colors={['#DDAC17', '#FFFA8A', '#ECC440']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.touch1}>
+                <Text style={styles.text}>Submit</Text>
+              </LinearGradient>
             </TouchableOpacity>
           </View>
           {console.log('this is date', date, dob)}
@@ -371,17 +387,17 @@ const PersonalDetail = () => {
               setOpen(false);
             }}
           />
-          <View style={{height: 140}} />
+          <View style={{ height: 140 }} />
         </KeyboardAwareScrollView>
       </ScrollView>
-    </ImageBackground>
+    </View>
   );
 };
 export default PersonalDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F9F4F1',
   },
   main: {
     paddingHorizontal: 24,
@@ -396,7 +412,8 @@ const styles = StyleSheet.create({
     height: 40,
     width: '100%',
     borderWidth: 1,
-    borderColor: '#FCDA64',
+    borderColor: '#FFD387',
+      backgroundColor: "#FFFFFF",
     marginTop: 5,
     paddingHorizontal: 8,
   },
@@ -404,7 +421,8 @@ const styles = StyleSheet.create({
     height: 40,
     width: '100%',
     borderWidth: 1,
-    borderColor: '#FCDA64',
+   borderColor: '#FFD387',
+      backgroundColor: "#FFFFFF",
     marginTop: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -415,6 +433,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontFamily: 'Montserrat-Medium',
     fontSize: 14,
+    
   },
   bottom: {
     marginTop: 128,
@@ -448,5 +467,5 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 4,
   },
-  text: {fontSize: 12, fontFamily: 'Montserrat-SemiBold', color: '#000'},
+  text: { fontSize: 12, fontFamily: 'Montserrat-SemiBold', color: '#000' },
 });

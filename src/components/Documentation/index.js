@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import Upload from '../../assets/Icon/Upload.svg';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import BackArrow from '../../assets/Icon/BackArrow.svg';
 import CheckBox from '@react-native-community/checkbox';
 import DocumentPicker from 'react-native-document-picker';
@@ -20,13 +20,14 @@ import Toast from 'react-native-simple-toast';
 import Loader from '../Loader';
 import axios from 'axios';
 import Modal from 'react-native-modal';
-import FormData, {getHeaders} from 'form-data';
+import FormData, { getHeaders } from 'form-data';
 import CircleCross from '../../assets/Icon/CircleCross.svg';
 import HTMLView from 'react-native-htmlview';
 import Constants from '../../Redux/Constants';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import LinearGradient from 'react-native-linear-gradient';
 
-const Documentation = ({onPress}) => {
+const Documentation = ({ onPress }) => {
   const [visible1, setVisible1] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
@@ -442,7 +443,7 @@ const Documentation = ({onPress}) => {
       // const result = await DocumentPicker.pickSingle({
       //   type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
       // });
-      const result=await launchImageLibrary(checklistImage)
+      const result = await launchImageLibrary(checklistImage)
       const res = result?.assets[0];
       if (type == 'photograph') {
         setPhoto(res.uri);
@@ -486,31 +487,30 @@ const Documentation = ({onPress}) => {
   };
 
   return (
-    <ImageBackground
-      source={require('../../assets/Logo/background.png')}
-      style={styles.container}>
+
+    <View style={styles.container}>
       {loader ? <Loader /> : null}
-      <ScrollView style={{flex: 1}}>
+      <ScrollView style={{ flex: 1 }}>
         <KeyboardAwareScrollView
           extraScrollHeight={Platform.OS == 'android' ? -200 : 100}
           enableOnAndroid={true}
           keyboardShouldPersistTaps="handled"
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          contentContainerStyle={{flexGrow: 1}}>
+          contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.main}>
             {/* <Text style={styles.title}>Your Photograph</Text> */}
             <View style={styles.row}>
               <Text style={styles.text1}>{'Your Photograph'}</Text>
-              <Text style={{color: 'red'}}>*</Text>
+              <Text style={{ color: 'red' }}>*</Text>
             </View>
             <TouchableOpacity
               onPress={() => setVisible1(true)}
-              style={[styles.touch, {marginTop: 5}]}>
+              style={[styles.touch, { marginTop: 5 }]}>
               <Upload />
               {photo ? (
                 <Text
                   numberOfLines={1}
-                  style={[styles.text2, {marginRight: 20}]}>
+                  style={[styles.text2, { marginRight: 20 }]}>
                   {photoName}
                 </Text>
               ) : (
@@ -521,19 +521,19 @@ const Documentation = ({onPress}) => {
               )}
             </TouchableOpacity>
 
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <View style={styles.row}>
                 <Text style={styles.text1}>{'GST Certificate'}</Text>
-                <Text style={{color: 'red'}}>*</Text>
+                <Text style={{ color: 'red' }}>*</Text>
               </View>
               <TouchableOpacity
                 onPress={() => setVisible2(true)}
-                style={[styles.touch, {marginTop: 5}]}>
+                style={[styles.touch, { marginTop: 5 }]}>
                 <Upload />
                 {gst ? (
                   <Text
                     numberOfLines={1}
-                    style={[styles.text2, {marginRight: 20}]}>
+                    style={[styles.text2, { marginRight: 20 }]}>
                     {gstName}
                   </Text>
                 ) : (
@@ -545,21 +545,21 @@ const Documentation = ({onPress}) => {
               </TouchableOpacity>
             </View>
 
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <View style={styles.row}>
                 <Text style={styles.text1}>{'PAN Card'}</Text>
-                <Text style={{color: 'red'}}>*</Text>
+                <Text style={{ color: 'red' }}>*</Text>
               </View>
               <TouchableOpacity
                 onPress={() => {
                   setVisible3(true);
                 }}
-                style={[styles.touch, {marginTop: 5}]}>
+                style={[styles.touch, { marginTop: 5 }]}>
                 <Upload />
                 {pan ? (
                   <Text
                     numberOfLines={1}
-                    style={[styles.text2, {marginRight: 20}]}>
+                    style={[styles.text2, { marginRight: 20 }]}>
                     {panName}
                   </Text>
                 ) : (
@@ -571,21 +571,21 @@ const Documentation = ({onPress}) => {
               </TouchableOpacity>
             </View>
 
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <View style={styles.row}>
                 <Text style={styles.text1}>{'Aadhar Card'}</Text>
-                <Text style={{color: 'red'}}>*</Text>
+                <Text style={{ color: 'red' }}>*</Text>
               </View>
               <TouchableOpacity
                 onPress={() => {
                   setVisible4(true);
                 }}
-                style={[styles.touch, {marginTop: 5}]}>
+                style={[styles.touch, { marginTop: 5 }]}>
                 <Upload />
                 {aadhar ? (
                   <Text
                     numberOfLines={1}
-                    style={[styles.text2, {marginRight: 20}]}>
+                    style={[styles.text2, { marginRight: 20 }]}>
                     {aadharName}
                   </Text>
                 ) : (
@@ -597,18 +597,18 @@ const Documentation = ({onPress}) => {
               </TouchableOpacity>
             </View>
 
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <Text style={styles.title}>IEC Certificate</Text>
               <TouchableOpacity
                 onPress={() => {
                   setVisible5(true);
                 }}
-                style={[styles.touch, {marginTop: 5}]}>
+                style={[styles.touch, { marginTop: 5 }]}>
                 <Upload />
                 {iec ? (
                   <Text
                     numberOfLines={1}
-                    style={[styles.text2, {marginRight: 20}]}>
+                    style={[styles.text2, { marginRight: 20 }]}>
                     {iecName}
                   </Text>
                 ) : (
@@ -619,18 +619,18 @@ const Documentation = ({onPress}) => {
               </TouchableOpacity>
             </View>
 
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <Text style={styles.title}>BIS Certificate</Text>
               <TouchableOpacity
                 onPress={() => {
                   setVisible6(true);
                 }}
-                style={[styles.touch, {marginTop: 5}]}>
+                style={[styles.touch, { marginTop: 5 }]}>
                 <Upload />
                 {bis ? (
                   <Text
                     numberOfLines={1}
-                    style={[styles.text2, {marginRight: 20}]}>
+                    style={[styles.text2, { marginRight: 20 }]}>
                     {bisName}
                   </Text>
                 ) : (
@@ -649,15 +649,15 @@ const Documentation = ({onPress}) => {
               paddingHorizontal: 17,
             }}>
             <CheckBox
-              style={{height: 25, width: 30}}
+              style={{ height: 25, width: 30 }}
               disabled={false}
               value={toggleCheckBox}
               onValueChange={newValue => setToggleCheckBox(newValue)}
-              tintColors={{true: '#FCDA64', false: '#FCDA64'}}
+              tintColors={{ true: '#FCDA64', false: '#FCDA64' }}
               onTintColor="#FCDA64"
               onCheckColor="#FCDA64"
             />
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               <Text
                 style={{
                   fontSize: 15,
@@ -681,17 +681,28 @@ const Documentation = ({onPress}) => {
             </View>
           </View>
           <View style={styles.bottom}>
-            <TouchableOpacity onPress={onPress} style={styles.arrow}>
-              <BackArrow />
+            <TouchableOpacity onPress={onPress} >
+              <LinearGradient
+                colors={['#AEAEAE', '#969998', '#4A4A4A']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.arrow}>
+                <BackArrow />
+              </LinearGradient>
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => becomeAmember()}
-              style={styles.button}>
-              <Text style={styles.submit}>Submit</Text>
+              onPress={() => becomeAmember()}>
+              <LinearGradient
+                colors={['#DDAC17', '#FFFA8A', '#ECC440']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.button}>
+                <Text style={styles.submit}>Submit</Text>
+              </LinearGradient>
             </TouchableOpacity>
 
-            <View style={{width: 40}} />
+            <View style={{ width: 40 }} />
           </View>
           <Modal isVisible={isVisible}>
             <View
@@ -702,10 +713,10 @@ const Documentation = ({onPress}) => {
               }}>
               <TouchableOpacity
                 onPress={() => setVisible(false)}
-                style={{alignSelf: 'flex-end', margin: 5}}>
+                style={{ alignSelf: 'flex-end', margin: 5 }}>
                 <CircleCross />
               </TouchableOpacity>
-              <ScrollView style={{padding: 20}}>
+              <ScrollView style={{ padding: 20 }}>
                 {data ? (
                   <HTMLView
                     value={data
@@ -714,7 +725,7 @@ const Documentation = ({onPress}) => {
                     addLineBreaks={false}
                   />
                 ) : null}
-                <View style={{height: 30}} />
+                <View style={{ height: 30 }} />
               </ScrollView>
             </View>
           </Modal>
@@ -1051,7 +1062,7 @@ const Documentation = ({onPress}) => {
 
           <Modal isVisible={visible6}>
             <View
-              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
               <View style={styles.first1}>
                 <View style={styles.row1}>
                   <View />
@@ -1119,7 +1130,7 @@ const Documentation = ({onPress}) => {
           </Modal>
         </KeyboardAwareScrollView>
       </ScrollView>
-    </ImageBackground>
+    </View>
   );
 };
 export default Documentation;
@@ -1137,7 +1148,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 40,
-    borderRadius: 8,
+    borderRadius: 6,
   },
   button1: {
     backgroundColor: '#000',
@@ -1145,12 +1156,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 40,
-    borderRadius: 8,
+    borderRadius: 6,
   },
   first1: {
-    backgroundColor: '#FDEDB1',
+    backgroundColor: '#F9F4F1',
     height: 125,
-    borderRadius: 16,
+    borderRadius: 10,
     width: '100%',
     alignSelf: 'center',
   },
@@ -1166,7 +1177,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F9F4F1',
   },
   main: {
     paddingHorizontal: 24,
@@ -1176,7 +1187,8 @@ const styles = StyleSheet.create({
     height: 40,
     width: '100%',
     borderWidth: 1,
-    borderColor: '#FCDA64',
+    borderColor: '#FFD387',
+    backgroundColor: "#FFFFFF",
 
     justifyContent: 'flex-start',
     paddingHorizontal: 10,

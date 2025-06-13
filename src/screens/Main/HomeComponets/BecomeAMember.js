@@ -6,6 +6,7 @@ import BusinessDetail from "../../../components/BusinessDetail";
 import Documentation from "../../../components/Documentation";
 import PersonalDetail from "../../../components/PersonalDetail";
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import LinearGradient from "react-native-linear-gradient";
 
 const BecomeaMember = () => {
     const navigation = useNavigation()
@@ -57,7 +58,7 @@ const BecomeaMember = () => {
         }
     }
     return (
-        <ImageBackground source={require('../../../assets/Logo/background.png')} style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+      <View style={{ flex: 1, backgroundColor: '#F9F4F1' }}>
             <Header
                 title={"Become a Member"}
                 onPress={() => navigation.goBack()}
@@ -76,7 +77,12 @@ const BecomeaMember = () => {
                                 style={{ marginHorizontal: 20, paddingVertical: 10, }}>
                                 {selectedId == item.id ?
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <View style={{ height: 15, width: 14, backgroundColor: '#FCDA64', borderTopLeftRadius: 20, borderBottomLeftRadius: 20, marginTop: 1 }} />
+                                          <LinearGradient
+                                                            colors={['#DDAC17', '#FFFA8A', '#ECC440']}
+                                                            start={{ x: 0, y: 0 }}
+                                                            end={{ x: 1, y: 0 }}
+                                                            style={{ height: 15, width: 14, borderTopLeftRadius: 20, borderBottomLeftRadius: 20, marginTop: 1 }}></LinearGradient>
+                                        {/* <View style={{ height: 15, width: 14, backgroundColor: '#FCDA64', borderTopLeftRadius: 20, borderBottomLeftRadius: 20, marginTop: 1 }} /> */}
                                         <Text style={[{
                                             color: selectedId == item.id ? '#000000' : 'grey', fontFamily: selectedId == item.id ? 'Montserrat-SemiBold' : 'Montserrat-Medium', marginLeft: -10, fontSize: 14
                                         }]}>
@@ -109,7 +115,7 @@ const BecomeaMember = () => {
                 </GestureRecognizer>
                 </ScrollView>
             </View>
-        </ImageBackground>
+        </View>
     )
 }
 export default BecomeaMember;

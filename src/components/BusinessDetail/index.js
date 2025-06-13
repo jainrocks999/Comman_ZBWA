@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,9 +14,10 @@ import BackArrow from '../../assets/Icon/BackArrow.svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Storage from '../../components/LocalStorage';
 import Toast from 'react-native-simple-toast';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import LinearGradient from 'react-native-linear-gradient';
 
-const BusinessDetail = ({onPress}) => {
+const BusinessDetail = ({ onPress }) => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [toggleCheckBox1, setToggleCheckBox1] = useState(false);
   const [name, setName] = useState('');
@@ -95,20 +96,19 @@ const BusinessDetail = ({onPress}) => {
   };
 
   return (
-    <ImageBackground
-      source={require('../../assets/Logo/background.png')}
-      style={styles.container}>
-      <ScrollView style={{flex: 1}}>
+
+    <View style={styles.container}>
+      <ScrollView style={{ flex: 1 }}>
         <KeyboardAwareScrollView
           extraScrollHeight={Platform.OS == 'android' ? -200 : 100}
           enableOnAndroid={true}
           keyboardShouldPersistTaps="handled"
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          contentContainerStyle={{flexGrow: 1}}>
+          contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.main}>
             <View style={{}}>
               <Text style={styles.heading}>
-                Business Name <Text style={{color: 'red'}}>*</Text>
+                Business Name <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <View style={styles.inputView}>
                 <TextInput
@@ -124,9 +124,9 @@ const BusinessDetail = ({onPress}) => {
                 />
               </View>
             </View>
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <Text style={styles.heading}>
-                GST Number <Text style={{color: 'red'}}>*</Text>
+                GST Number <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <View style={styles.inputView}>
                 <TextInput
@@ -142,9 +142,9 @@ const BusinessDetail = ({onPress}) => {
                 />
               </View>
             </View>
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <Text style={styles.heading}>
-                Business Address <Text style={{color: 'red'}}>*</Text>
+                Business Address <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <View style={styles.inputView}>
                 <TextInput
@@ -160,9 +160,9 @@ const BusinessDetail = ({onPress}) => {
                 />
               </View>
             </View>
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <Text style={styles.heading}>
-                Location <Text style={{color: 'red'}}>*</Text>
+                Location <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <View style={styles.inputView}>
                 <TextInput
@@ -184,18 +184,18 @@ const BusinessDetail = ({onPress}) => {
                     <TextInput/>
                 </View>
             </View> */}
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <View style={styles.view}>
                 <Text style={styles.heading}>
-                  Phone <Text style={{color: 'red'}}>*</Text>
+                  Phone <Text style={{ color: 'red' }}>*</Text>
                 </Text>
                 <View style={styles.row}>
                   <CheckBox
-                    style={{height: 25, width: 30}}
+                    style={{ height: 25, width: 30 }}
                     disabled={false}
                     value={toggleCheckBox}
                     onValueChange={newValue => handleToggle(newValue)}
-                    tintColors={{true: '#FCDA64', false: '#FCDA64'}}
+                    tintColors={{ true: '#FCDA64', false: '#FCDA64' }}
                     onTintColor="#FCDA64"
                     onCheckColor="#FCDA64"
                   />
@@ -224,18 +224,18 @@ const BusinessDetail = ({onPress}) => {
                 />
               </View>
             </View>
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <View style={styles.view}>
                 <Text style={styles.heading}>
-                  Email <Text style={{color: 'red'}}>*</Text>
+                  Email <Text style={{ color: 'red' }}>*</Text>
                 </Text>
                 <View style={styles.row}>
                   <CheckBox
-                    style={{height: 25, width: 30}}
+                    style={{ height: 25, width: 30 }}
                     disabled={false}
                     value={toggleCheckBox1}
                     onValueChange={newValue => handleToggle1(newValue)}
-                    tintColors={{true: '#FCDA64', false: '#FCDA64'}}
+                    tintColors={{ true: '#FCDA64', false: '#FCDA64' }}
                     onTintColor="#FCDA64"
                     onCheckColor="#FCDA64"
                   />
@@ -258,29 +258,40 @@ const BusinessDetail = ({onPress}) => {
               </View>
             </View>
           </View>
-          <View style={{height: 214}} />
+          <View style={{ height: 214 }} />
           {/* height:214 */}
           <View style={styles.bottom}>
-            <TouchableOpacity onPress={onPress} style={styles.back}>
-              <BackArrow />
+            <TouchableOpacity onPress={onPress}>
+              <LinearGradient
+                colors={['#AEAEAE', '#969998', '#4A4A4A']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.back}>
+                <BackArrow />
+              </LinearGradient>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => handleBusinessDetails()}
-              style={styles.button}>
-              <Text style={styles.submit}>Submit</Text>
+              onPress={() => handleBusinessDetails()}>
+              <LinearGradient
+                colors={['#DDAC17', '#FFFA8A', '#ECC440']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.button}>
+                <Text style={styles.submit}>Submit</Text>
+              </LinearGradient>
             </TouchableOpacity>
-            <View style={{width: 40}} />
+            <View style={{ width: 40 }} />
           </View>
         </KeyboardAwareScrollView>
       </ScrollView>
-    </ImageBackground>
+    </View>
   );
 };
 export default BusinessDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F9F4F1',
   },
   main: {
     paddingHorizontal: 24,
@@ -295,7 +306,8 @@ const styles = StyleSheet.create({
     height: 40,
     width: '100%',
     borderWidth: 1,
-    borderColor: '#FCDA64',
+    borderColor: '#FFD387',
+    backgroundColor: "#FFFFFF",
     marginTop: 5,
     paddingHorizontal: 8,
   },
